@@ -1,0 +1,17 @@
+.App {
+  display: flex;
+}
+.CodeMirror {
+  font-family: 'Fira Code', monospace;
+  font-size: 24px;
+  flex-basis: 50%;
+  overflow: scroll;
+  height: auto;
+}
+.CodeMirror pre.CodeMirror-placeholder {
+  color: #999;
+}
+
+.CodeMirror pre {
+  padding: 0 40px; /* Horizontal padding of content */
+}

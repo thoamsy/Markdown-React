@@ -23,6 +23,11 @@ class MarkdownEditor extends Component {
       extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList' },
       addModeClass: true
     });
+    this.editor.on('change', this.change);
+  }
+
+  change = (instance) => {
+    this.props.sendToWorker(instance.doc.getValue());
   }
 
   render() {

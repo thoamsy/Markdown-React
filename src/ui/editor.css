@@ -1,14 +1,16 @@
 .my-gfm {
-  display: flex;
+  position: relative;
   font-family: "Source Sans Pro", sans-serif;
+  justify-content: space-between;
 }
 .CodeMirror {
+  position: absolute;
+  height: auto;
+  left: 0;
+  right: calc(50% + 10px);
   font-family: 'Fira Code', monospace;
   font-size: 20px;
-  flex-basis: 50%;
-  max-width: 50%;
   overflow: scroll;
-  height: auto;
 }
 .CodeMirror pre.CodeMirror-placeholder {
   color: #999;
@@ -21,14 +23,19 @@
 
 /* 渲染样式 */
 .preview {
-  max-width: 50%;
-  flex-basis: 50%;
+  position: absolute;
+  left: 50%;
+  right: 0;  
+  /* transform: translateX(50%); */
   font-size: 24px;
   color: #3f3f3f;
-  padding: 10px;
+  padding: 10px 40px;
   line-height: 1.45;
   background: #f6f6f6;
   overflow-wrap: break-word;
+  overflow: scroll;
+
+  transform: scroll .5s;
 }
 .preview a {
     color: #4fa1bd;

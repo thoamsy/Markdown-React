@@ -6,14 +6,14 @@ class GFM extends Component {
   state = { 
     markedHTML: ''
    }
-  componentDidMount() {
+  async componentDidMount() {
     // 动态导入 Web Worker 来渲染 markdown
-    import('worker-loader!../worker.js').then(worker => {
-      this.renderMarkdown = new worker();
-      this.renderMarkdown.onmessage = ({ data }) => {
-        this.setState({ markedHTML: data });
-      }
-    });
+    let worker = await import('worker-loader!../worker.js');
+    this.renderMarkdown = new worker();
+    this.renderMarkdown.onmessage = ({ data }) => {
+      this.setState({ markedHTML: data });
+    }
+    this.handleEditor(window.codeMirror.getValue());
   }
 
   componentWillUnmount() {

@@ -3,6 +3,7 @@ import mark from 'markdown-it-mark';
 import footnote from 'markdown-it-footnote';
 import checkbox from 'markdown-it-checkbox';
 import hljs from 'highlight.js';
+
 const md = Markdown({
   breaks: true,
   linkify: true,

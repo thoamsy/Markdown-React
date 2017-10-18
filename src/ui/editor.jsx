@@ -7,6 +7,7 @@ import 'codemirror/addon/edit/continuelist';
 import 'codemirror/theme/dracula.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/display/placeholder';
+import 'codemirror/keymap/vim';
 import './editor.css';
 
 class MarkdownEditor extends Component {
@@ -17,7 +18,9 @@ class MarkdownEditor extends Component {
         highlightFormatting: true,
       },
       showCursorWhenSelecting: true,
+      keyMap: 'vim',
       autofocus: true,
+      lineWrapping: true,
       autoCloseBrackets: true,
       theme: 'dracula',
       extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList' },

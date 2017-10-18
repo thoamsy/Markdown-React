@@ -6,6 +6,7 @@
   font-family: 'Fira Code', monospace;
   font-size: 20px;
   flex-basis: 50%;
+  max-width: 50%;
   overflow: scroll;
   height: auto;
 }
@@ -20,12 +21,14 @@
 
 /* 渲染样式 */
 .preview {
+  max-width: 50%;
   flex-basis: 50%;
   font-size: 24px;
   color: #3f3f3f;
   padding: 10px;
   line-height: 1.45;
   background: #f6f6f6;
+  overflow-wrap: break-word;
 }
 .preview a {
     color: #4fa1bd;

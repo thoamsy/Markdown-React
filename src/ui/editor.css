@@ -1,5 +1,6 @@
 .my-gfm {
   display: flex;
+  font-family: "Source Sans Pro", sans-serif;
 }
 .CodeMirror {
   font-family: 'Fira Code', monospace;
@@ -19,14 +20,12 @@
 
 /* 渲染样式 */
 .preview {
-  font-family: Georgia, 'Times New Roman', Times, serif;
   flex-basis: 50%;
   font-size: 24px;
   color: #3f3f3f;
   padding: 10px;
   line-height: 1.45;
   background: #f6f6f6;
-  /* color: white; */
 }
 .preview a {
     color: #4fa1bd;

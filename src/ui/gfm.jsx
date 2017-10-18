@@ -13,11 +13,15 @@ class GFM extends Component {
       this.renderMarkdown.onmessage = ({ data }) => {
         this.setState({ markedHTML: data });
       }
-    })
+    });
+  }
+
+  componentWillUnmount() {
+    this.renderMarkdown.terminate();
   }
 
   handleEditor = (input) => {
-    this.renderMarkdown.postMessage(input);
+    this.renderMarkdown && this.renderMarkdown.postMessage(input);
   }
 
   render() {
@@ -25,7 +29,7 @@ class GFM extends Component {
       <div className="my-gfm">
         <Editor sendToWorker={this.handleEditor}/>
         <Preview output={this.state.markedHTML}/>
-      </div>
+      </div> 
     );
   }
 }

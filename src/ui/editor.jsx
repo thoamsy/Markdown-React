@@ -24,6 +24,11 @@ class MarkdownEditor extends Component {
       addModeClass: true
     });
     this.editor.on('change', this.change);
+    this.editor.setValue('You are so **good**');
+  }
+
+  componentWillUnmount() {
+    this.editor.off('change', this.change);
   }
 
   change = (instance) => {

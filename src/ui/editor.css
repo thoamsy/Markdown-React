@@ -36,8 +36,18 @@
 
 .preview pre {
   border: 1px solid #ccc;
-  padding: .5em;
+  padding: 10px 20px;
+  maring: 0 0 1.1em;
+  border: 0;
+  border-radius: 5px;
+  display: block;
+  line-height: 1.45;
+  word-wrap: break-word;
+  color: #333;
+  background-color: rgba(128,128,128,.05);
+
 }
+
 h1,h2,h3,h4,h5,h6 {
   font-weight: bold;
 }
@@ -46,6 +56,11 @@ h1,h2,h3,h4,h5,h6 {
   border-left: 10px solid rgba(128, 128, 128, .075);
   background-color: rgba(128,128,128,.05);
   border-radius: 0 5px 5px 0;
-  padding: 15px 20px;
+  padding: 15px 20px 10px;
+}
 
+sup.footnote-ref {
+  position: relative;
+  top: -.5em;
+  font-size: .8em;
 }

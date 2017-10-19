@@ -6,17 +6,29 @@ import Nav from './nav';
 class GFM extends Component {
   state = {
     markedHTML: '',
-    title: 'untitled'
+    title: '',
+    date: '',
+    content: ''
   };
 
   async componentDidMount() {
+    // about title, updated date, and content;
+    const article = JSON.parse(localStorage.getItem(`markdown-lastWrite`)) || {
+      content: '',
+      title: 'untitled'
+    }
+    this.setState({
+      ...article
+    });
+
     // 动态导入 Web Worker 来渲染 markdown
     let worker = await import('worker-loader!../worker.js');
     this.renderMarkdown = new worker();
     this.renderMarkdown.onmessage = ({ data }) => {
       this.setState({ markedHTML: data });
     };
-    this.handleEditor(this.codeMirror.getValue());
+    this.handleEditor(article.content);
+    this.codeMirror.setValue(article.content);
     this.bindSyncScroll();
   }
 
@@ -50,6 +62,22 @@ class GFM extends Component {
     this.codeMirror = instance;
   };
 
+  saveArticle = (article) => {
+    const data = JSON.stringify({
+      content: article,
+      title: this.state.title,
+      date: Date.now()
+    });
+    localStorage.setItem(
+      `markdown${this.state.title}`,
+      data
+    );
+    localStorage.setItem(
+      'markdown-lastWrite',
+      data
+    );
+  }
+
   getFirstLine = (content = '# untitled') => {
     // 将第一行作为标题
     content = content.trim();
@@ -72,6 +100,8 @@ class GFM extends Component {
             sendToWorker={this.handleEditor}
             getInstance={this.getInstance}
             getFirstLine={this.getFirstLine}
+            save={this.saveArticle}
+            content={this.state.content}
         />
         <Preview output={this.state.markedHTML} />
         </div>

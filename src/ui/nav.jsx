@@ -38,7 +38,7 @@ class Navbar extends Component {
   render() {
     const { showInput, title, beInput } = this.state;
     return (
-      <nav className="navbar navbar-dark bg-dark">
+      <nav className="navbar navbar-dark bg-dark fixed-top">
         <ul className="navbar-nav mr-auto">
           {showInput || (
             <li className="nav-item">

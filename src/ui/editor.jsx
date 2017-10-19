@@ -23,19 +23,22 @@ class MarkdownEditor extends Component {
       autofocus: true,
       lineWrapping: true,
       autoCloseBrackets: true,
-      theme: 'twlight',
+      theme: 'twilight',
       extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList' },
-      addModeClass: true,
-      value: 'You are so **good**'
     });
     // 让父元素获取 editor 示例
     this.props.getInstance(this.editor);
     this.editor.on('change', this.change);
-    this.editor.setValue('You are so **good**');
+    this.editor.on('blur', this.autoSave);
+
+    // 30s 自动保存
+    this.timer = setInterval(this.autoSave, 30000);
   }
+
 
   componentWillUnmount() {
     this.editor.off('change', this.change);
+    clearInterval(this.timer);
   }
 
   change = editor => {
@@ -48,6 +51,10 @@ class MarkdownEditor extends Component {
       start++;
     }
     this.props.getFirstLine(firstLine);
+  }
+
+  autoSave = () => {
+    this.props.save(this.editor.getValue());
   }
 
   render() {

@@ -39,7 +39,15 @@ class MarkdownEditor extends Component {
   }
 
   change = editor => {
-    this.props.sendToWorker(editor.doc.getValue());
+    const doc = editor.getDoc();
+    this.props.sendToWorker(doc.getValue());
+
+    let start = 0;
+    let firstLine = doc.getLine(start);
+    while (!(firstLine = doc.getLine(start)) && start < doc.lineCount()) {
+      start++;
+    }
+    this.props.getFirstLine(firstLine);
   }
 
   render() {

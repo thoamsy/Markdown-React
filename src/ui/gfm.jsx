@@ -5,8 +5,10 @@ import Nav from './nav';
 
 class GFM extends Component {
   state = {
-    markedHTML: ''
+    markedHTML: '',
+    title: 'untitled'
   };
+
   async componentDidMount() {
     // 动态导入 Web Worker 来渲染 markdown
     let worker = await import('worker-loader!../worker.js');
@@ -48,14 +50,28 @@ class GFM extends Component {
     this.codeMirror = instance;
   };
 
+  getFirstLine = (content = '# untitled') => {
+    // 将第一行作为标题
+    content = content.trim();
+    if (content.startsWith('# ')) {
+      content = content.slice(2);
+      if (content !== this.state.title) {
+        this.setState({
+          title: content
+        });
+      }
+    }
+  }
+
   render() {
     return (
       <div className="container-fluid">
-        <Nav/>
+        <Nav title={this.state.title}/>
         <div className="my-gfm">
         <Editor
-          sendToWorker={this.handleEditor}
-          getInstance={this.getInstance}
+            sendToWorker={this.handleEditor}
+            getInstance={this.getInstance}
+            getFirstLine={this.getFirstLine}
         />
         <Preview output={this.state.markedHTML} />
         </div>

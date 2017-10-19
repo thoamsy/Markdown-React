@@ -5,7 +5,7 @@ import fileIcon from '../icons/ic_folder_white_36px.svg';
 class Navbar extends Component {
   state = {
     showInput: false,
-    title: 'untitled',
+    title: this.props.title,
     beInput: ''
   };
 
@@ -15,6 +15,12 @@ class Navbar extends Component {
       beInput: prev.title
     }), () => document.querySelector('nav input[type=text]').select());
   };
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      title: nextProps.title
+    });
+  }
 
   handleTitleChange = ({ target }) => {
     this.setState({

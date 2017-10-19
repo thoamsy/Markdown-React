@@ -3,7 +3,8 @@ import mark from 'markdown-it-mark';
 import footnote from 'markdown-it-footnote';
 import checkbox from 'markdown-it-checkbox';
 import hljs from 'highlight.js';
-
+import idb from 'idb';
+import { sort, prop, descend } from 'ramda';
 
 const md = Markdown({
   breaks: true,
@@ -20,6 +21,46 @@ const md = Markdown({
   .use(footnote)
   .use(checkbox);
 
-self.onmessage = ({ data }) => {
-  postMessage(md.render(data));
+const storeName = 'articles';
+const dbPromise = idb.open('markdown-db', 2, updated => {
+  switch (updated.oldVersion) {
+  case 1: {
+    updated.createObjectStore(storeName, { keyPath: 'title' });
+    const store = updated.transaction.objectStore(storeName);
+    store.createIndex('updatedDate', 'updatedDate', { unique: true });
+  }
+  }
+});
+
+const getStore = () =>
+  dbPromise.then(db => db.transaction(storeName, 'readwrite').objectStore(storeName));
+
+async function retrieveAllArticles() {
+  const store = await getStore();
+  let articles;
+  try {
+    articles = store.getAll();
+    console.log('Success');
+  } catch (err) {
+    console.error(err);
+  }
+  return articles;
+}
+
+let articles;
+self.onmessage = async ({ data }) => {
+  if (data === 'get last article') {
+    const sortByDate = sort(descend(prop('updatedDate')));
+    articles = sortByDate(await retrieveAllArticles());
+    postMessage(articles[0]);
+    return;
+  }
+  if (typeof data === 'string') {
+    // 用来渲染
+    postMessage(md.render(data));
+  } else if (typeof data === 'object') {
+    // 用来存储
+    const store = await getStore();
+    store.put(data);
+  }
 };

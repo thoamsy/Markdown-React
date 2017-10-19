@@ -2,33 +2,45 @@ import React, { Component } from 'react';
 import Editor from './editor';
 import Preview from './preview';
 import Nav from './nav';
+import {
+  __,
+  not,
+  curry,
+  pick,
+  when,
+  both,
+  trim,
+  startsWith,
+  assoc,
+  pipe,
+  equals
+} from 'ramda';
 
 class GFM extends Component {
   state = {
     markedHTML: '',
-    title: '',
+    title: 'untitled',
     date: '',
     content: ''
   };
 
   async componentDidMount() {
-    // about title, updated date, and content;
-    const article = JSON.parse(localStorage.getItem(`markdown-lastWrite`)) || {
-      content: '',
-      title: 'untitled'
-    }
-    this.setState({
-      ...article
-    });
-
     // 动态导入 Web Worker 来渲染 markdown
     let worker = await import('worker-loader!../worker.js');
     this.renderMarkdown = new worker();
     this.renderMarkdown.onmessage = ({ data }) => {
-      this.setState({ markedHTML: data });
+      if (typeof data === 'string') {
+        this.setState({ markedHTML: data });
+      }
+      if (typeof data === 'object') {
+        this.codeMirror.setValue(data.content);
+        this.sendToWorker(data.content);
+        this.setState({
+          ...data
+        });
+      }
     };
-    this.handleEditor(article.content);
-    this.codeMirror.setValue(article.content);
+    this.renderMarkdown.postMessage('get last article');
     this.bindSyncScroll();
   }
 
@@ -41,8 +53,10 @@ class GFM extends Component {
     const right = document.querySelector('.preview');
     let timer;
     function sync({ target }) {
+      // 将另外一个滚动的事件清除，以防止无限循环。
       const other = [left, right].find(div => div !== target);
       other.removeEventListener('scroll', sync);
+      // 防止出现抖动问题
       if (typeof timer !== undefined) clearTimeout(timer);
 
       timer = setTimeout(() => other.addEventListener('scroll', sync), 200);
@@ -54,7 +68,7 @@ class GFM extends Component {
     right.addEventListener('scroll', sync);
   }
 
-  handleEditor = input => {
+  sendToWorker = input => {
     this.renderMarkdown && this.renderMarkdown.postMessage(input);
   };
 
@@ -62,48 +76,44 @@ class GFM extends Component {
     this.codeMirror = instance;
   };
 
-  saveArticle = (article) => {
-    const data = JSON.stringify({
+  saveArticle = article => {
+    const data = {
       content: article,
       title: this.state.title,
-      date: Date.now()
-    });
-    localStorage.setItem(
-      `markdown${this.state.title}`,
-      data
-    );
-    localStorage.setItem(
-      'markdown-lastWrite',
-      data
-    );
-  }
+      updatedDate: Date.now()
+    };
+    this.renderMarkdown.postMessage(data);
+  };
 
   getFirstLine = (content = '# untitled') => {
-    // 将第一行作为标题
-    content = content.trim();
-    if (content.startsWith('# ')) {
-      content = content.slice(2);
-      if (content !== this.state.title) {
-        this.setState({
-          title: content
-        });
-      }
-    }
-  }
+    const updateState = curry((names, newState) => {
+      this.setState(pick(names, newState));
+    });
+
+    const isHeaderAndNotEqualBefore = both(
+        startsWith('# '),
+        pipe(equals('# ' + this.state.title), not)
+    );
+    // 函数式编程的方式
+    when(
+      isHeaderAndNotEqualBefore,
+      pipe(assoc('title', __, {}), updateState(['title']))
+    )(trim(content));
+  };
 
   render() {
     return (
       <div className="container-fluid">
-        <Nav title={this.state.title}/>
+        <Nav title={this.state.title} />
         <div className="my-gfm">
-        <Editor
-            sendToWorker={this.handleEditor}
+          <Editor
+            sendToWorker={this.sendToWorker}
             getInstance={this.getInstance}
             getFirstLine={this.getFirstLine}
             save={this.saveArticle}
             content={this.state.content}
-        />
-        <Preview output={this.state.markedHTML} />
+          />
+          <Preview output={this.state.markedHTML} />
         </div>
       </div>
     );

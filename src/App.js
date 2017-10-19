@@ -10,13 +10,12 @@ const changeHeight = () => {
   });
 };
 window.onresize = changeHeight;
-window.onload = changeHeight;
+window.addEventListener('load', changeHeight);
+
 
 class App extends Component {
   render() {
-    return (
-      <GFM/>
-    );
+    return <GFM />;
   }
 }
 

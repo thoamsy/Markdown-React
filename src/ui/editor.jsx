@@ -28,32 +28,18 @@ class MarkdownEditor extends Component {
       addModeClass: true,
       value: 'You are so **good**'
     });
-    // TODO: 一个临时的解决方案
-    window.codeMirror = this.editor;
+    // 让父元素获取 editor 示例
+    this.props.getInstance(this.editor);
     this.editor.on('change', this.change);
-    this.editor.on('scroll', this.handleScroll);
     this.editor.setValue('You are so **good**');
   }
 
   componentWillUnmount() {
     this.editor.off('change', this.change);
-    this.editor.off('scroll', this.handleScroll);
   }
 
   change = editor => {
     this.props.sendToWorker(editor.doc.getValue());
-  }
-
-  handleScroll = editor => {
-      const {
-        offsetHeight,
-        scrollHeight,
-        scrollTop
-      } = this.editor.getScrollerElement();
-      const precentage = scrollTop / (scrollHeight - offsetHeight);
-      const preview = document.querySelector('.preview');
-      const x = precentage * (preview.scrollHeight - preview.offsetHeight);
-      preview.scrollTop = x;
   }
 
   render() {

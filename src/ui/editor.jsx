@@ -4,7 +4,7 @@ import 'codemirror/mode/gfm/gfm';
 import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
-import 'codemirror/theme/base16-light.css';
+import 'codemirror/theme/twilight.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/vim';
@@ -23,7 +23,7 @@ class MarkdownEditor extends Component {
       autofocus: true,
       lineWrapping: true,
       autoCloseBrackets: true,
-      theme: 'base16-light',
+      theme: 'twlight',
       extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList' },
       addModeClass: true,
       value: 'You are so **good**'

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Editor from './editor';
 import Preview from './preview';
+import Nav from './nav';
 
 class GFM extends Component {
   state = {
@@ -49,12 +50,15 @@ class GFM extends Component {
 
   render() {
     return (
-      <div className="my-gfm">
+      <div className="container-fluid">
+        <Nav/>
+        <div className="my-gfm">
         <Editor
           sendToWorker={this.handleEditor}
           getInstance={this.getInstance}
         />
         <Preview output={this.state.markedHTML} />
+        </div>
       </div>
     );
   }

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import './ui/editor.css';
 import GFM from './ui/gfm';
 
 // 用来强制两个 div 出现滚动条

@@ -13,7 +13,8 @@ import {
   startsWith,
   assoc,
   pipe,
-  equals
+  equals,
+  slice
 } from 'ramda';
 
 class GFM extends Component {
@@ -97,7 +98,7 @@ class GFM extends Component {
     // 函数式编程的方式
     when(
       isHeaderAndNotEqualBefore,
-      pipe(assoc('title', __, {}), updateState(['title']))
+      pipe(slice(2, Infinity), assoc('title', __, {}), updateState(['title']))
     )(trim(content));
   };
 

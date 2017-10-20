@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Editor from './editor';
 import Preview from './preview';
 import Nav from './nav';
+import FileExplore from './sidebar';
 import {
-  __,
   not,
   curry,
   pick,
@@ -11,7 +11,7 @@ import {
   both,
   trim,
   startsWith,
-  assoc,
+  objOf,
   pipe,
   equals,
   slice
@@ -34,10 +34,14 @@ class GFM extends Component {
         this.setState({ markedHTML: data });
       }
       if (typeof data === 'object') {
-        this.codeMirror.setValue(data.content);
-        this.sendToWorker(data.content);
+        // 加载的时候获取最新的文章和所有的文章标题。
+        const { lastArticle, allTitles, allDates } = data;
+        this.codeMirror.setValue(lastArticle.content);
+        this.sendToWorker(lastArticle.content);
         this.setState({
-          ...data
+          ...lastArticle,
+          allTitles,
+          allDates
         });
       }
     };
@@ -98,7 +102,7 @@ class GFM extends Component {
     // 函数式编程的方式
     when(
       isHeaderAndNotEqualBefore,
-      pipe(slice(2, Infinity), assoc('title', __, {}), updateState(['title']))
+      pipe(slice(2, Infinity), objOf('title'), updateState(['title']))
     )(trim(content));
   };
 
@@ -106,6 +110,10 @@ class GFM extends Component {
     return (
       <div className="container-fluid">
         <Nav title={this.state.title} />
+        <FileExplore files={this.state.allTitles}
+          currentFile={this.state.title}
+          writedDates={this.state.allDates}
+        />
         <div className="my-gfm">
           <Editor
             sendToWorker={this.sendToWorker}

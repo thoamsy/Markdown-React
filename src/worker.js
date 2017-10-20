@@ -4,7 +4,7 @@ import footnote from 'markdown-it-footnote';
 import checkbox from 'markdown-it-checkbox';
 import hljs from 'highlight.js';
 import idb from 'idb';
-import { sort, prop, descend } from 'ramda';
+import { sort, prop, descend, pluck } from 'ramda';
 
 const md = Markdown({
   breaks: true,
@@ -52,7 +52,11 @@ self.onmessage = async ({ data }) => {
   if (data === 'get last article') {
     const sortByDate = sort(descend(prop('updatedDate')));
     articles = sortByDate(await retrieveAllArticles());
-    postMessage(articles[0]);
+    postMessage({
+      lastArticle: articles[0],
+      allTitles: pluck('title', articles),
+      allDates:  pluck('updatedDate', articles)
+    });
     return;
   }
   if (typeof data === 'string') {

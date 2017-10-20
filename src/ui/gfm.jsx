@@ -3,6 +3,7 @@ import Editor from './editor';
 import Preview from './preview';
 import Nav from './nav';
 import FileExplore from './sidebar';
+import { v4 } from 'uuid';
 import {
   not,
   curry,
@@ -35,10 +36,8 @@ class GFM extends PureComponent {
       }
       if (typeof data === 'object') {
         // 加载的时候获取最新的文章和所有的文章标题。
-        console.log(data);
         const { lastArticle, allTitles, allDates, allIds } = data;
         if (lastArticle) {
-          this.codeMirror.setValue(lastArticle.content);
           this.sendToWorker(lastArticle.content);
           this.setState({
             ...lastArticle,
@@ -53,7 +52,7 @@ class GFM extends PureComponent {
         }
       }
     };
-    this.worker.postMessage('get last article');
+    this.worker.postMessage({ useFor: 'inital' });
     this.bindSyncScroll();
   }
 
@@ -82,26 +81,25 @@ class GFM extends PureComponent {
   }
 
   sendToWorker = input => {
-    this.worker && this.worker.postMessage(input);
+    this.worker && this.worker.postMessage({ markdown: input, useFor: 'render' });
   };
 
   switchArticle = (articleId) => {
-    this.worker.postMessage(articleId);
+    this.worker.postMessage({ id: articleId, useFor: 'get' });
   }
 
   getInstance = (instance) => {
     this.codeMirror = instance;
   };
 
-  saveArticle = (article, id) => {
-    if (!this.state.id) this.setState({ id });
+  saveArticle = (content, id) => {
     const data = {
-      content: article,
+      content,
       title: this.state.title,
       updatedDate: Date.now(),
-      id: this.state.id || id
+      id: this.state.id
     };
-    this.worker.postMessage(data);
+    this.worker.postMessage({ article: data, useFor: 'update' });
   };
 
   updateState = curry((names, newState) => {
@@ -120,6 +118,16 @@ class GFM extends PureComponent {
     )(trim(content));
   };
 
+  createNewDocument = () => {
+    // 重置这些数据
+    this.setState({
+      title: '',
+      content: '',
+      markedHTML: '',
+      id: v4()
+    });
+  }
+
   render() {
     const {
       allTitles,
@@ -127,19 +135,19 @@ class GFM extends PureComponent {
       title,
       id,
       allDates,
-      switchArticle,
       markedHTML,
       content
     } = this.state;
     return (
       <div className="container-fluid">
-        <Nav title={title} />
+        <Nav title={title} createNewDocument={this.createNewDocument} />
+        {/* 文件浏览器保存的是所有文章的标题，id，上次修改是时间。以及当前文章的一些信息 */}
         <FileExplore
           articles={allTitles}
           articlesId={allIds}
           currentArticle={{ ...{ id, title } }}
           lastEditedDates={allDates}
-          switchArticle={switchArticle}
+          switchArticle={this.switchArticle}
         />
         <div className="my-gfm">
           <Editor

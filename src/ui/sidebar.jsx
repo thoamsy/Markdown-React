@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { zip } from 'ramda';
+import { transpose } from 'ramda';
 const FileExplore = ({
   articles = [],
   currentArticle: { id, title },
@@ -8,9 +8,8 @@ const FileExplore = ({
   lastEditedDates = [],
   switchArticle,
 }) => {
-  const handleClick = ({ target }) => {
-    const clickedId = target.getAttribute('data-id');
-    console.log(clickedId, id);
+  const handleClick = ({ currentTarget }) => {
+    const clickedId = currentTarget.getAttribute('data-id');
     if (clickedId === id) return;
     switchArticle(clickedId);
   }; 
@@ -18,15 +17,16 @@ const FileExplore = ({
     <aside>
       <div className="nav list-group">
         {
-          zip(articles, lastEditedDates).map(([theTitle, date], i) => (
-            <a className={
-              `list-group-item list-group-item-action ${theTitle === title && 'active'}`} href="#" key={i} data-id={articlesId[i]}
-            onClick={handleClick}
-            >
-              <h5 className="mb-1">{theTitle}</h5>
-              <small>{moment(date).fromNow()}</small>
-            </a>
-          ))
+          transpose([articles, lastEditedDates, articlesId]).map(
+            ([theTitle, date, id], i) => (
+              <a className={
+                `list-group-item list-group-item-action ${theTitle === title && 'active'}`} href="#" key={i} data-id={id}
+              onClick={handleClick}
+              >
+                <h5 className="mb-1">{theTitle}</h5>
+                <small>{`lastUpdated: ${moment(date).fromNow()}`}</small>
+              </a>
+            ))
         }
       </div>
     </aside>

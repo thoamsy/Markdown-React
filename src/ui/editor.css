@@ -77,10 +77,11 @@ sup.footnote-ref {
 
 
 /* 导航栏 */
-.navbar img.library {
+.navbar .d-flex>img {
   transition: all .2s ease-out;
+  position: relative;
 }
-.navbar img.library:hover {
+.navbar .d-flex>img:hover {
   transform: scale(1.3);
 }
 

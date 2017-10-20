@@ -53,7 +53,6 @@ async function retrieveAllArticles() {
   return articles;
 }
 
-let articles;
 self.onmessage = async ({ data }) => {
   const { useFor } = data;
   switch (useFor) {
@@ -69,18 +68,16 @@ self.onmessage = async ({ data }) => {
     case 'update': {
       const store = await getStore();
       store.put(data.article);
-      break;
+      // 故意的不用 break。性能问题这里先不考虑
     }
     case 'inital': {
       const sortByDate = sort(descend(prop('updatedDate')));
-      articles = sortByDate(await retrieveAllArticles());
+      let articles = sortByDate(await retrieveAllArticles());
       // TODO: need to be refactor;
-      project(['title', 'updatedDate', 'id'])
+      const metas = project(['title', 'updatedDate', 'id'], articles);
       postMessage({
         lastArticle: articles[0],
-        allTitles: pluck('title', articles),
-        allDates: pluck('updatedDate', articles),
-        allIds: pluck('id', articles)
+        metas
       });
       break;
     }

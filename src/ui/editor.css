@@ -102,7 +102,7 @@ aside.show {
   transform: translateX(-50%);
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 768px) {
   .CodeMirror {
     flex-basis: 0%;
   }

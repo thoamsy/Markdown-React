@@ -35,15 +35,13 @@ class GFM extends PureComponent {
         this.setState({ markedHTML: data });
       }
       if (typeof data === 'object') {
-        // 加载的时候获取最新的文章和所有的文章标题。
-        const { lastArticle, allTitles, allDates, allIds } = data;
+        // 加载的时候获取最新的文章和所有文章的元数据
+        const { lastArticle, metas: articleInformations } = data;
         if (lastArticle) {
           this.sendToWorker(lastArticle.content);
           this.setState({
             ...lastArticle,
-            allTitles,
-            allDates,
-            allIds
+             articleInformations
           });
         } else {
           const { content } = data;
@@ -130,11 +128,9 @@ class GFM extends PureComponent {
 
   render() {
     const {
-      allTitles,
-      allIds,
+      articleInformations,
       title,
       id,
-      allDates,
       markedHTML,
       content
     } = this.state;
@@ -143,10 +139,7 @@ class GFM extends PureComponent {
         <Nav title={title} createNewDocument={this.createNewDocument} />
         {/* 文件浏览器保存的是所有文章的标题，id，上次修改是时间。以及当前文章的一些信息 */}
         <FileExplore
-          articles={allTitles}
-          articlesId={allIds}
-          currentArticle={{ ...{ id, title } }}
-          lastEditedDates={allDates}
+          {...{ theId: id, theTitle: title, articleInformations }}
           switchArticle={this.switchArticle}
         />
         <div className="my-gfm">

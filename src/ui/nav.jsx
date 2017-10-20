@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import fileIcon from '../icons/ic_folder_white_36px.svg';
 
-class Navbar extends Component {
+class Navbar extends PureComponent {
   state = {
     showInput: false,
     title: this.props.title,

@@ -4,11 +4,11 @@ import GFM from './ui/gfm';
 // 用来强制两个 div 出现滚动条
 const changeHeight = () => {
   const { offsetHeight } = document.querySelector('.navbar');
-  // const element = document.querySelector('.my-gfm');
-  // element.style.height = window.innerHeight - offsetHeight + 'px';
-  document.querySelectorAll('.CodeMirror, .preview').forEach(element => {
-    element.style.height = window.innerHeight - offsetHeight + 'px';
-  });
+  const element = document.querySelector('.my-gfm');
+  element.style.height = window.innerHeight - offsetHeight + 'px';
+  // document.querySelectorAll('.CodeMirror, .preview').forEach(element => {
+  //   element.style.height = window.innerHeight - offsetHeight + 'px';
+  // });
 };
 window.onresize = changeHeight;
 window.addEventListener('load', changeHeight);

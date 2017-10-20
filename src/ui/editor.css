@@ -17,18 +17,19 @@
 .CodeMirror pre.CodeMirror-placeholder {
   color: #999;
 }
-
-.CodeMirror pre {
-  padding: 0 40px; /* Horizontal padding of content */
+.CodeMirror-scroll {
+  padding: 10px 40px 0;
 }
+
 
 
 /* 渲染样式 */
 .preview {
-  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
   flex-basis: 50%;
   /* transform: translateX(50%); */
-  font-size: 24px;
+  font-size: 20px;
   color: #3f3f3f;
   padding: 10px 40px;
   line-height: 1.45;
@@ -44,7 +45,7 @@
 
 .preview pre {
   border: 1px solid #ccc;
-  padding: 10px 20px;
+  padding: 10px;
   maring: 0 0 1.1em;
   border: 0;
   border-radius: 5px;

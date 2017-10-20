@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Editor from './editor';
 import Preview from './preview';
 import Nav from './nav';
@@ -17,40 +17,48 @@ import {
   slice
 } from 'ramda';
 
-class GFM extends Component {
+class GFM extends PureComponent {
   state = {
     markedHTML: '',
     title: 'untitled',
-    date: '',
-    content: ''
+    content: '',
+    id: ''
   };
 
   async componentDidMount() {
     // 动态导入 Web Worker 来渲染 markdown
     let worker = await import('worker-loader!../worker.js');
-    this.renderMarkdown = new worker();
-    this.renderMarkdown.onmessage = ({ data }) => {
+    this.worker = new worker();
+    this.worker.onmessage = ({ data }) => {
       if (typeof data === 'string') {
         this.setState({ markedHTML: data });
       }
       if (typeof data === 'object') {
         // 加载的时候获取最新的文章和所有的文章标题。
-        const { lastArticle, allTitles, allDates } = data;
-        this.codeMirror.setValue(lastArticle.content);
-        this.sendToWorker(lastArticle.content);
-        this.setState({
-          ...lastArticle,
-          allTitles,
-          allDates
-        });
+        console.log(data);
+        const { lastArticle, allTitles, allDates, allIds } = data;
+        if (lastArticle) {
+          this.codeMirror.setValue(lastArticle.content);
+          this.sendToWorker(lastArticle.content);
+          this.setState({
+            ...lastArticle,
+            allTitles,
+            allDates,
+            allIds
+          });
+        } else {
+          const { content } = data;
+          this.sendToWorker(content);
+          this.setState({ ...data });
+        }
       }
     };
-    this.renderMarkdown.postMessage('get last article');
+    this.worker.postMessage('get last article');
     this.bindSyncScroll();
   }
 
   componentWillUnmount() {
-    this.renderMarkdown.terminate();
+    this.worker.terminate();
   }
 
   bindSyncScroll() {
@@ -74,27 +82,33 @@ class GFM extends Component {
   }
 
   sendToWorker = input => {
-    this.renderMarkdown && this.renderMarkdown.postMessage(input);
+    this.worker && this.worker.postMessage(input);
   };
 
-  getInstance = instance => {
+  switchArticle = (articleId) => {
+    this.worker.postMessage(articleId);
+  }
+
+  getInstance = (instance) => {
     this.codeMirror = instance;
   };
 
-  saveArticle = article => {
+  saveArticle = (article, id) => {
+    if (!this.state.id) this.setState({ id });
     const data = {
       content: article,
       title: this.state.title,
-      updatedDate: Date.now()
+      updatedDate: Date.now(),
+      id: this.state.id || id
     };
-    this.renderMarkdown.postMessage(data);
+    this.worker.postMessage(data);
   };
 
-  getFirstLine = (content = '# untitled') => {
-    const updateState = curry((names, newState) => {
-      this.setState(pick(names, newState));
-    });
+  updateState = curry((names, newState) => {
+    this.setState(pick(names, newState));
+  });
 
+  getFirstLine = (content = '# untitled') => {
     const isHeaderAndNotEqualBefore = both(
         startsWith('# '),
         pipe(equals('# ' + this.state.title), not)
@@ -102,17 +116,30 @@ class GFM extends Component {
     // 函数式编程的方式
     when(
       isHeaderAndNotEqualBefore,
-      pipe(slice(2, Infinity), objOf('title'), updateState(['title']))
+      pipe(slice(2, Infinity), objOf('title'), this.updateState(['title']))
     )(trim(content));
   };
 
   render() {
+    const {
+      allTitles,
+      allIds,
+      title,
+      id,
+      allDates,
+      switchArticle,
+      markedHTML,
+      content
+    } = this.state;
     return (
       <div className="container-fluid">
-        <Nav title={this.state.title} />
-        <FileExplore files={this.state.allTitles}
-          currentFile={this.state.title}
-          writedDates={this.state.allDates}
+        <Nav title={title} />
+        <FileExplore
+          articles={allTitles}
+          articlesId={allIds}
+          currentArticle={{ ...{ id, title } }}
+          lastEditedDates={allDates}
+          switchArticle={switchArticle}
         />
         <div className="my-gfm">
           <Editor
@@ -120,9 +147,9 @@ class GFM extends Component {
             getInstance={this.getInstance}
             getFirstLine={this.getFirstLine}
             save={this.saveArticle}
-            content={this.state.content}
+            content={content}
           />
-          <Preview output={this.state.markedHTML} />
+          <Preview output={markedHTML} />
         </div>
       </div>
     );

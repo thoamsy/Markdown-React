@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/gfm/gfm';
 import CodeMirror from 'codemirror';
@@ -9,9 +9,10 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/vim';
 import './editor.css';
+import { v4 } from 'uuid';
 
 
-class MarkdownEditor extends Component {
+class MarkdownEditor extends PureComponent {
   componentDidMount() {
     this.editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
       mode: {
@@ -30,7 +31,7 @@ class MarkdownEditor extends Component {
     this.props.getInstance(this.editor);
     this.editor.on('change', this.change);
     this.editor.on('blur', this.autoSave);
-
+    this.id = v4();
     // 30s 自动保存
     this.timer = setInterval(this.autoSave, 30000);
   }
@@ -41,10 +42,11 @@ class MarkdownEditor extends Component {
     clearInterval(this.timer);
   }
 
-  change = editor => {
+  change = (editor, changeObj) => {
     const doc = editor.getDoc();
     this.props.sendToWorker(doc.getValue());
 
+    // 同时检测是否修改了第一行。
     let start = 0;
     let firstLine = doc.getLine(start);
     while (!(firstLine = doc.getLine(start)) && start < doc.lineCount()) {
@@ -54,7 +56,7 @@ class MarkdownEditor extends Component {
   }
 
   autoSave = () => {
-    this.props.save(this.editor.getValue());
+    this.props.save(this.editor.getValue(), this.id);
   }
 
   render() {

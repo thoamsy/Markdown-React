@@ -74,12 +74,11 @@ sup.footnote-ref {
   font-size: .8em;
 }
 
-
-
 /* 导航栏 */
 .navbar .d-flex>img {
   transition: all .2s ease-out;
   position: relative;
+  cursor: pointer;
 }
 .navbar .d-flex>img:hover {
   transform: scale(1.3);
@@ -93,13 +92,32 @@ aside {
   flex-direction: column;
   align-items: center;
   width: 300px;
+  transition: all .4s ease-out;
+  z-index: 1050;
 }
 
 aside.hidden {
-  transform: translateX(100%);
+  transform: translateX(300px);
 }
-aside.show {
-  transform: translateX(-50%);
+aside.toggled {
+  transform: translateX(0);
+}
+
+.container-fluid>.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1030;
+  background-color: #606060;
+}
+.container-fluid>.backdrop.in {
+  opacity: .5;
+}
+.container-fluid>.backdrop.out {
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media screen and (max-width: 768px) {

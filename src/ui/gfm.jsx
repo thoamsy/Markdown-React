@@ -15,7 +15,12 @@ import {
   objOf,
   pipe,
   equals,
-  slice
+  slice,
+  update,
+  findIndex,
+  propEq,
+  prepend,
+  reject
 } from 'ramda';
 
 class GFM extends PureComponent {
@@ -23,7 +28,8 @@ class GFM extends PureComponent {
     markedHTML: '',
     title: 'untitled',
     content: '',
-    id: ''
+    id: v4(),
+    showSidebar: false
   };
 
   async componentDidMount() {
@@ -56,6 +62,7 @@ class GFM extends PureComponent {
 
   componentWillUnmount() {
     this.worker.terminate();
+    // 似乎不太好清除滚动监听事件。 不过本来就只有一个界面，没必要咯
   }
 
   bindSyncScroll() {
@@ -97,11 +104,22 @@ class GFM extends PureComponent {
       updatedDate: Date.now(),
       id: this.state.id
     };
+    // 存进 indexedDB
     this.worker.postMessage({ article: data, useFor: 'update' });
+    // 获得文章信息的拷贝。
+    const { articleInformations } = this.state;
+    const getMeta = pick(['title', 'updatedDate', 'id'], data);
+    const updateArticleMetas = pipe(
+      reject(propEq('id', data.id)),
+      prepend(getMeta),
+      objOf('articleInformations'),
+      this.updateState
+    );
+    updateArticleMetas(articleInformations);
   };
 
-  updateState = curry((names, newState) => {
-    this.setState(pick(names, newState));
+  updateState = curry((newState) => {
+    this.setState(newState);
   });
 
   getFirstLine = (content = '# untitled') => {
@@ -112,7 +130,7 @@ class GFM extends PureComponent {
     // 函数式编程的方式
     when(
       isHeaderAndNotEqualBefore,
-      pipe(slice(2, Infinity), objOf('title'), this.updateState(['title']))
+      pipe(slice(2, Infinity), objOf('title'), this.updateState)
     )(trim(content));
   };
 
@@ -126,23 +144,33 @@ class GFM extends PureComponent {
     });
   }
 
+  toggleSidebar = () => {
+    this.setState(prev => ({
+      showSidebar: !prev.showSidebar
+    }));
+  }
+
   render() {
     const {
       articleInformations,
       title,
       id,
       markedHTML,
-      content
+      content,
+      showSidebar
     } = this.state;
     return (
       <div className="container-fluid">
-        <Nav title={title} createNewDocument={this.createNewDocument} />
-        {/* 文件浏览器保存的是所有文章的标题，id，上次修改是时间。以及当前文章的一些信息 */}
+        <Nav title={title}
+          createNewDocument={this.createNewDocument}
+          toggleSidebar={this.toggleSidebar} />
+        <div className={`backdrop ${showSidebar ? 'in' : 'out'}`}
+          onClick={this.toggleSidebar} ></div>
         <FileExplore
-          {...{ theId: id, theTitle: title, articleInformations }}
+          {...{ theId: id, theTitle: title, articleInformations, showSidebar }}
           switchArticle={this.switchArticle}
         />
-        <div className="my-gfm">
+        <article className="my-gfm">
           <Editor
             sendToWorker={this.sendToWorker}
             getInstance={this.getInstance}
@@ -151,7 +179,7 @@ class GFM extends PureComponent {
             content={content}
           />
           <Preview output={markedHTML} />
-        </div>
+        </article>
       </div>
     );
   }

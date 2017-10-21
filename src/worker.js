@@ -30,16 +30,17 @@ const dbPromise = idb.open('markdown-db', 3, updated => {
       store.createIndex('updatedDate', 'updatedDate', { unique: true });
     }
     case 2: {
-      updated.deleteObjectStore(storeName);
+      updated.objectStoreNames.contains(storeName)
+        && updated.deleteObjectStore(storeName);
       updated.createObjectStore(storeName, { keyPath: 'id' });
     }
   }
 });
 
 const getStore = () =>
-  dbPromise.then(db =>
-    db.transaction(storeName, 'readwrite').objectStore(storeName)
-  );
+  dbPromise.then(function open(db) {
+    return db.transaction(storeName, 'readwrite').objectStore(storeName)
+  }).catch(console.error); 
 
 async function retrieveAllArticles() {
   const store = await getStore();
@@ -69,15 +70,15 @@ self.onmessage = async ({ data }) => {
       const store = await getStore();
       store.put(data.article);
       // 故意的不用 break。性能问题这里先不考虑
+      break;
     }
     case 'inital': {
       const sortByDate = sort(descend(prop('updatedDate')));
       let articles = sortByDate(await retrieveAllArticles());
       // TODO: need to be refactor;
-      const metas = project(['title', 'updatedDate', 'id'], articles);
       postMessage({
         lastArticle: articles[0],
-        metas
+        metas: project(['title', 'updatedDate', 'id'], articles)
       });
       break;
     }

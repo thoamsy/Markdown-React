@@ -4,8 +4,9 @@ import moment from 'moment';
 const FileExplore = ({
   theId,
   theTitle,
-  articleInformations = [],
+  articleInformations = [], // 因为第一次取的时候是 undefined，导致 map 失败。至于为什么刚开始是 undefined， 可能是异步的原因。
   switchArticle,
+  showSidebar
 }) => {
   const handleClick = ({ currentTarget }) => {
     const clickedId = currentTarget.getAttribute('data-id');
@@ -13,7 +14,7 @@ const FileExplore = ({
     switchArticle(clickedId);
   }; 
   return (
-    <aside>
+    <aside className={showSidebar ? 'toggled' : 'hidden'}>
       <div className="nav list-group">
         {
           articleInformations.map(

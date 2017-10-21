@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-// import { transpose } from 'ramda';
 const FileExplore = ({
   theId,
   theTitle,
@@ -13,6 +12,7 @@ const FileExplore = ({
     if (clickedId === theId) return;
     switchArticle(clickedId);
   }; 
+  moment.locale('zh-cn');
   return (
     <aside className={showSidebar ? 'toggled' : 'hidden'}>
       <div className="nav list-group">

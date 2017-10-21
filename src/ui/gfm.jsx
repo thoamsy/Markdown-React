@@ -145,6 +145,7 @@ class GFM extends PureComponent {
       id: v4(),
       content: ''
     });
+    this.codeMirror.setValue('');
   }
 
   toggleSidebar = () => {

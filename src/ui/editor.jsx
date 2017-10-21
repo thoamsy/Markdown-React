@@ -49,6 +49,7 @@ class MarkdownEditor extends PureComponent {
     this.editor.off('change', this.change);
     clearInterval(this.timer);
   }
+
   change = (editor, changeObj) => {
     const doc = editor.getDoc();
     this.props.sendToWorker(doc.getValue());
@@ -56,6 +57,7 @@ class MarkdownEditor extends PureComponent {
     // 同时检测是否修改了第一行。
     let start = 0;
     let firstLine = doc.getLine(start);
+
     while (!(firstLine = doc.getLine(start)) && start < doc.lineCount()) {
       start++;
     }

@@ -4,7 +4,7 @@ import moment from 'moment';
 const FileExplore = ({
   theId,
   theTitle,
-  articleInformations = [], // 因为第一次取的时候是 undefined，导致 map 失败。至于为什么刚开始是 undefined， 可能是异步的原因。
+  articleInformations = [],
   switchArticle,
   showSidebar
 }) => {
@@ -17,16 +17,20 @@ const FileExplore = ({
     <aside className={showSidebar ? 'toggled' : 'hidden'}>
       <div className="nav list-group">
         {
-          articleInformations.map(
-            ({ title, updatedDate, id }, i) => (
-              <a className={
-                `list-group-item list-group-item-action ${theId === id && 'active'}`} href="#" key={i} data-id={id}
-              onClick={handleClick}
-              >
-                <h5 className="mb-1">{title}</h5>
-                <small>{`Last updated: ${moment(updatedDate).fromNow()}`}</small>
-              </a>
-            ))
+          articleInformations.length ? 
+            articleInformations.map(
+              ({ title, updatedDate, id }, i) => (
+                <a className={
+                  `list-group-item list-group-item-action ${theId === id && 'active'}`} href="#" key={i} data-id={id}
+                onClick={handleClick}
+                >
+                  <h5 className="mb-1">{title}</h5>
+                  <small>{`Last updated: ${moment(updatedDate).fromNow()}`}</small>
+                </a>
+              )) :
+            <a className='list-group active list-group-item-action'>
+              <h5 className="text-capitalize">You have nothing</h5>
+            </a>
         }
       </div>
     </aside>

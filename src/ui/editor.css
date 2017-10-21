@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('../font/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf')
+}
 .my-gfm {
   margin-top: 70px;
   display: flex;
@@ -54,11 +58,17 @@
   word-wrap: break-word;
   color: #333;
   background-color: rgba(128,128,128,.05);
-
 }
 
-h1,h2,h3,h4,h5,h6 {
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview h5,
+.preview h6 {
   font-weight: bold;
+  margin: 1em 0;
+  text-align: start;
 }
 
 .preview blockquote {

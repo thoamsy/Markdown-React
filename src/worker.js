@@ -22,22 +22,8 @@ const md = Markdown({
   .use(checkbox);
 
 const storeName = 'articles';
-const dbPromise = idb.open('markdown-db', 4, updated => {
-  switch (updated.oldVersion) {
-    case 1: {
-      updated.createObjectStore(storeName, { keyPath: 'title' });
-      const store = updated.transaction.objectStore(storeName);
-      store.createIndex('updatedDate', 'updatedDate', { unique: true });
-    }
-    case 2: {
-      updated.objectStoreNames.contains(storeName)
-        && updated.deleteObjectStore(storeName);
-      updated.createObjectStore(storeName, { keyPath: 'id' });
-    }
-    case 3: {
-      updated.createObjectStore(storeName, { keyPath: 'id' });
-    }
-  }
+const dbPromise = idb.open('markdown-db', 1, updated => {
+  updated.createObjectStore(storeName, { keyPath: 'id' });
 });
 
 const getStore = () =>

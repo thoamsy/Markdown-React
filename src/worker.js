@@ -22,7 +22,7 @@ const md = Markdown({
   .use(checkbox);
 
 const storeName = 'articles';
-const dbPromise = idb.open('markdown-db', 3, updated => {
+const dbPromise = idb.open('markdown-db', 4, updated => {
   switch (updated.oldVersion) {
     case 1: {
       updated.createObjectStore(storeName, { keyPath: 'title' });
@@ -32,6 +32,9 @@ const dbPromise = idb.open('markdown-db', 3, updated => {
     case 2: {
       updated.objectStoreNames.contains(storeName)
         && updated.deleteObjectStore(storeName);
+      updated.createObjectStore(storeName, { keyPath: 'id' });
+    }
+    case 3: {
       updated.createObjectStore(storeName, { keyPath: 'id' });
     }
   }
@@ -58,12 +61,14 @@ self.onmessage = async ({ data }) => {
   const { useFor } = data;
   switch (useFor) {
     case 'render': {
-      postMessage(md.render(data.markdown));
+      postMessage(md.render(data.markdown || ''));
       break;
     }
     case 'get': {
       const store = await getStore();
-      postMessage(await store.get(data.id));
+      postMessage({
+        article: await store.get(data.id)
+      });
       break;
     }
     case 'update': {
@@ -74,8 +79,9 @@ self.onmessage = async ({ data }) => {
     }
     case 'inital': {
       const sortByDate = sort(descend(prop('updatedDate')));
+      // 防止第一次读取的时候没有值， 使用默认值
+      const now = Date.now();
       let articles = sortByDate(await retrieveAllArticles());
-      // TODO: need to be refactor;
       postMessage({
         lastArticle: articles[0],
         metas: project(['title', 'updatedDate', 'id'], articles)

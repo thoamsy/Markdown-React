@@ -9,15 +9,13 @@ import {
   curry,
   pick,
   when,
-  both,
+  always,
   trim,
   startsWith,
   objOf,
   pipe,
   equals,
   slice,
-  update,
-  findIndex,
   propEq,
   prepend,
   reject
@@ -42,17 +40,19 @@ class GFM extends PureComponent {
       }
       if (typeof data === 'object') {
         // 加载的时候获取最新的文章和所有文章的元数据
-        const { lastArticle, metas: articleInformations } = data;
-        if (lastArticle) {
+        const { lastArticle = [], metas: articleInformations = [] } = data;
+        // 如果是初始化操作
+        if (!data.article) {
           this.sendToWorker(lastArticle.content);
           this.setState({
             ...lastArticle,
              articleInformations
           });
         } else {
-          const { content } = data;
+          const { article } = data;
+          const { content } = article;
+          this.setState({ ...article });
           this.sendToWorker(content);
-          this.setState({ ...data });
         }
       }
     };
@@ -86,10 +86,11 @@ class GFM extends PureComponent {
   }
 
   sendToWorker = input => {
-    this.worker && this.worker.postMessage({ markdown: input, useFor: 'render' });
+    this.worker.postMessage({ markdown: input, useFor: 'render' });
   };
 
   switchArticle = (articleId) => {
+    this.toggleSidebar();
     this.worker.postMessage({ id: articleId, useFor: 'get' });
   }
 
@@ -104,6 +105,7 @@ class GFM extends PureComponent {
       updatedDate: Date.now(),
       id: this.state.id
     };
+    if (!data.id || data.title === 'untitled') return;
     // 存进 indexedDB
     this.worker.postMessage({ article: data, useFor: 'update' });
     // 获得文章信息的拷贝。
@@ -122,25 +124,26 @@ class GFM extends PureComponent {
     this.setState(newState);
   });
 
-  getFirstLine = (content = '# untitled') => {
-    const isHeaderAndNotEqualBefore = both(
-        startsWith('# '),
-        pipe(equals('# ' + this.state.title), not)
+  getFirstLine = (content = '') => {
+    // 如果 content 不满足这个要求，就默认值为 # untitled
+    const pretreat = when(
+      pipe(trim, startsWith('# '), not),
+      always('# untitled')
     );
-    // 函数式编程的方式
+    const equalsWithBefore = pipe(equals(`# ${this.state.title}`), not);
     when(
-      isHeaderAndNotEqualBefore,
+      equalsWithBefore,
       pipe(slice(2, Infinity), objOf('title'), this.updateState)
-    )(trim(content));
+    )(pretreat(content));
   };
 
   createNewDocument = () => {
     // 重置这些数据
     this.setState({
       title: '',
-      content: '',
       markedHTML: '',
-      id: v4()
+      id: v4(),
+      content: ''
     });
   }
 

@@ -40,14 +40,15 @@ class MarkdownEditor extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.content !== this.props.content) {
+      console.log('Change the render');
       this.editor.setValue(nextProps.content);
     }
   }
+
   componentWillUnmount() {
     this.editor.off('change', this.change);
     clearInterval(this.timer);
   }
-
   change = (editor, changeObj) => {
     const doc = editor.getDoc();
     this.props.sendToWorker(doc.getValue());

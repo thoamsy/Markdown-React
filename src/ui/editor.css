@@ -1,5 +1,5 @@
 .my-gfm {
-  margin-top: 54px;
+  margin-top: 70px;
   display: flex;
   font-family: "Source Sans Pro", sans-serif;
   justify-content: space-between;
@@ -75,6 +75,11 @@ sup.footnote-ref {
 }
 
 /* 导航栏 */
+.navbar li>a {
+  font-size: 30px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
 .navbar .d-flex>img {
   transition: all .2s ease-out;
   position: relative;

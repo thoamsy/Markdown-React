@@ -20,7 +20,7 @@ const FileExplore = ({
           articleInformations.map(
             ({ title, updatedDate, id }, i) => (
               <a className={
-                `list-group-item list-group-item-action ${theTitle === title && 'active'}`} href="#" key={i} data-id={id}
+                `list-group-item list-group-item-action ${theId === id && 'active'}`} href="#" key={i} data-id={id}
               onClick={handleClick}
               >
                 <h5 className="mb-1">{title}</h5>

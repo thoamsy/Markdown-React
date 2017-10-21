@@ -22,5 +22,6 @@ Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it
 
 ## 使用方式
 安装 `yarn`，使用 `yarn install && yarn start` 来开启调试。(确实我不确定能不能成功，安装了 eslint 的配置文件后，多了一个 `package.lock.json`，不知道有没有影响。)
+ 当然，可以看在线 [demote](https://queenyoung.github.io/Markdown-React/)
 ## 总结
 其实我项目的经验一直不多，但是通过整个任务也让我认识到**开源让世界更美好**。同时发现函数式编程真的是一个可以减少 bug 的好手段。但是由于对 ramda 不是很熟悉，在想把某个范式转化成函数式的时候，会花很长时间看文档并尝试。也算是一个不小的挑战把。

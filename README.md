@@ -1,9 +1,14 @@
 # 简易 markdown 编辑器
-整个项目基于 [React](reactjs.org) 和 [Boostrap 4](http://getbootstrap.com/docs/4.0/getting-started/introduction/) Beta 1 创建。 
+整个项目基于 [React](reactjs.org) 和 [Boostrap 4](http://getbootstrap.com/docs/4.0/getting-started/introduction/) Beta 2 创建。 
+
 Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it)，一个非常卓绝的库。
+
 代码高亮部分使用的是—[highlight.js](https://highlightjs.org)
+
 代码中使用的**函数式编程库**来自 [ramda.js](https://ramdajs.com)
+
 另外用到了 [moment.js](https://momentjs.com/) 获得可读的时间。
+
 感谢开源程序员的付出。
 
 ## 实现的功能
@@ -14,6 +19,7 @@ Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it
     2. VIM 模式
     3. 自动生成括号
     4. 高亮代码块部分的内容
+    5. 支持 Drop-Drag(只支持 md 文件)
 3. Markdown 部分
     1. 支持表格
     2. 支持 checkbox
@@ -32,7 +38,8 @@ Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it
 
 ## Bugs
 1. 如果连续多次点击 + 那个按钮话，会出现点小问题，但是不影响使用，就先不修咯。
-2. 上次修改时间显示的还是英文格式，按道理我已经本地化了，但是没用。
+2. 在移动端 WebKit (iOS 上所有浏览器都是) 不支持存储功能，因为 `indexedDB` 不支持 Web Worker
+3. 移动端，侧边栏并不会真正的隐藏(CSS 不好就是看不懂 :()
 ---
 
 ## 总结

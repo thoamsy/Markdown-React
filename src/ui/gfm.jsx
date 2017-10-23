@@ -108,7 +108,7 @@ class GFM extends PureComponent {
     if (!data.id || data.title === 'untitled') return;
     // 存进 indexedDB
     this.worker.postMessage({ article: data, useFor: 'update' });
-    // 获得文章信息的拷贝。
+
     const { articleInformations } = this.state;
     const getMeta = pick(['title', 'updatedDate', 'id'], data);
     const updateArticleMetas = pipe(

@@ -1,5 +1,7 @@
 import React from 'react';
 import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 const FileExplore = ({
   theId,
   theTitle,
@@ -12,7 +14,6 @@ const FileExplore = ({
     if (clickedId === theId) return;
     switchArticle(clickedId);
   }; 
-  moment.locale('zh-cn');
   return (
     <aside className={showSidebar ? 'toggled' : 'hidden'}>
       <div className="nav list-group">
@@ -25,7 +26,7 @@ const FileExplore = ({
                 onClick={handleClick}
                 >
                   <h5 className="mb-1">{title}</h5>
-                  <small>{`Last updated: ${moment(updatedDate).fromNow()}`}</small>
+                  <small>{`上次更新: ${moment(updatedDate).fromNow()}`}</small>
                 </a>
               )) :
             <a className='list-group active list-group-item-action'>

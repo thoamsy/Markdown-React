@@ -2,17 +2,20 @@
   font-family: 'Source Sans Pro';
   src: url('../font/Source_Sans_Pro/SourceSansPro-Regular.ttf') format('ttf')
 }
+body {
+  overflow-x: hidden;
+}
+
 .my-gfm {
   margin-top: 70px;
   display: flex;
   font-family: "Source Sans Pro", sans-serif;
   justify-content: space-between;
+  max-width: 100%;
 }
 .CodeMirror {
   height: 100%;
-  flex-basis: 50%;
-  max-width: 50%;
-  height: auto;
+  flex: 0 50%;
   font-family: 'Fira Code', monospace;
   font-size: 20px;
   overflow: scroll;
@@ -102,29 +105,28 @@ sup.footnote-ref {
 /* 侧边栏 */
 aside {
   position: absolute;
+  top: 70px;
   right: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 300px;
   transition: all .4s ease-out;
   z-index: 1050;
 }
 
 aside.hidden {
-  transform: translateX(300px);
+  transform: translateX(100%);
 }
 aside.toggled {
   transform: translateX(0);
 }
 
 .container-fluid>.backdrop {
+  max-width: 100%;
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  z-index: 1030;
+  z-index: 1040;
   background-color: #606060;
 }
 .container-fluid>.backdrop.in {

@@ -10,13 +10,13 @@ Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it
 另外用到了 [moment.js](https://momentjs.com/) 获得可读的时间。
 
 感谢开源程序员的付出。
-
+**因为 Safari 不支持在 Web Worker 中使用 `await`，还是不要使用 Safari 测试**。
 ## 实现的功能
 
 1. 实时渲染. 通过 `web worker` 来生成 markdown 渲染后的 HTML 代码，稍微提供性能。不过渲染 HTML 成 DOM 仅仅用的是 `innerHTML`，感觉效率还是偏低，但是不知道如果提高
 2. 编辑器部分
     1. 高亮当前行
-    2. VIM 模式
+    2. VIM 模式 (Safari 不支持)
     3. 自动生成括号
     4. 高亮代码块部分的内容
     5. 支持 Drop-Drag(只支持 md 文件)

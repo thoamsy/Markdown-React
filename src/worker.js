@@ -60,7 +60,6 @@ self.onmessage = async ({ data }) => {
     case 'update': {
       const store = await getStore();
       store.put(data.article);
-      // 故意的不用 break。性能问题这里先不考虑
       break;
     }
     case 'inital': {

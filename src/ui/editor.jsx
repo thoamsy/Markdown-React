@@ -5,20 +5,19 @@ import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
 import 'codemirror/addon/display/placeholder';
-import 'codemirror/addon/edit/matchbrackets'
+import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/theme/twilight.css';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/keymap/vim';
-import './editor.css';
-
+import 'bulma/css/bulma.css';
 
 class MarkdownEditor extends PureComponent {
   componentDidMount() {
     this.editor = CodeMirror.fromTextArea(document.querySelector('textarea'), {
       mode: {
         name: 'gfm',
-        highlightFormatting: true,
+        highlightFormatting: true
       },
       showCursorWhenSelecting: true,
       keyMap: navigator.userAgent.includes('Chrome') ? 'vim' : 'default',
@@ -29,7 +28,7 @@ class MarkdownEditor extends PureComponent {
       allowDropFileTypes: ['text/markdown'],
       matchBrackets: true,
       theme: 'twilight',
-      extraKeys: { 'Enter': 'newlineAndIndentContinueMarkdownList' },
+      extraKeys: { Enter: 'newlineAndIndentContinueMarkdownList' }
     });
     // 让父元素获取 editor 示例
     this.props.getInstance(this.editor);
@@ -37,6 +36,7 @@ class MarkdownEditor extends PureComponent {
     this.editor.on('blur', this.autoSave);
     // 30s 自动保存
     this.timer = setInterval(this.autoSave, 30000);
+    document.querySelector('.CodeMirror').classList.add('column');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,16 +63,14 @@ class MarkdownEditor extends PureComponent {
       start++;
     }
     this.props.getFirstLine(firstLine);
-  }
+  };
 
   autoSave = () => {
     this.props.save(this.editor.getValue());
-  }
+  };
 
   render() {
-    return (
-      <textarea placeholder="write your mind."/>
-    );
+    return <textarea placeholder="write your mind." />;
   }
 }
 export default MarkdownEditor;

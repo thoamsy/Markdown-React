@@ -15,25 +15,35 @@ const FileExplore = ({
     switchArticle(clickedId);
   }; 
   return (
-    <aside className={showSidebar ? 'toggled' : 'hidden'}>
-      <div className="nav list-group">
+    <aside className={`menu ${showSidebar ? 'toggled' : 'hidden'}`}>
+      <p className="menu-label">已保存</p>
+      <ul className="menu-list">
         {
           articleInformations.length ? 
             articleInformations.map(
               ({ title, updatedDate, id }, i) => (
-                <a className={
-                  `list-group-item list-group-item-action ${theId === id && 'active'}`} href="#" key={i} data-id={id}
-                onClick={handleClick}
-                >
-                  <h5 className="mb-1">{title}</h5>
-                  <small>{`上次更新: ${moment(updatedDate).fromNow()}`}</small>
-                </a>
+                <li>
+                  <a className={
+                    `${theId === id && 'is-active'} is-dark`} href="#" key={i} data-id={id}
+                  onClick={handleClick}
+                  >
+                    {title}
+                    <div className="tags has-addons">
+                      <span className="tag is-light">上次更新</span>
+                      <span className="tag is-success">
+                        {moment(updatedDate).fromNow()}
+                      </span>
+                    </div>
+                  </a>
+                </li>
               )) :
-            <a className='list-group active list-group-item-action'>
-              <h5 className="text-capitalize">You have nothing</h5>
-            </a>
+            <article className="message">
+              <div className="message-body">
+                You have nothing writed.
+              </div>
+            </article>
         }
-      </div>
+      </ul>
     </aside>
   );
 };

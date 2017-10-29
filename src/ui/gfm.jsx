@@ -57,6 +57,7 @@ class GFM extends PureComponent {
       }
     };
     this.worker.postMessage({ useFor: 'inital' });
+
     this.bindSyncScroll();
   }
 
@@ -67,7 +68,7 @@ class GFM extends PureComponent {
 
   bindSyncScroll() {
     const left = this.codeMirror.getScrollerElement();
-    const right = document.querySelector('.preview');
+    const right = document.querySelector('.content');
     let timer;
     function sync({ target }) {
       // 将另外一个滚动的事件清除，以防止无限循环。
@@ -166,7 +167,7 @@ class GFM extends PureComponent {
       showSidebar
     } = this.state;
     return (
-      <div className="container-fluid">
+      <div className="container is-fluid">
         <Nav title={title}
           createNewDocument={this.createNewDocument}
           toggleSidebar={this.toggleSidebar} />
@@ -176,7 +177,7 @@ class GFM extends PureComponent {
           {...{ theId: id, theTitle: title, articleInformations, showSidebar }}
           switchArticle={this.switchArticle}
         />
-        <article className="my-gfm">
+        <article className="my-gfm columns">
           <Editor
             sendToWorker={this.sendToWorker}
             getInstance={this.getInstance}

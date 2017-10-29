@@ -1,3 +1,5 @@
+import 'font-awesome/css/font-awesome.min.css';
+import './ui/editor.css';
 import React, { Component } from 'react';
 import GFM from './ui/gfm';
 
@@ -6,9 +8,6 @@ const changeHeight = () => {
   const { offsetHeight } = document.querySelector('.navbar');
   const element = document.querySelector('.my-gfm');
   element.style.height = window.innerHeight - offsetHeight + 'px';
-  // document.querySelectorAll('.CodeMirror, .preview').forEach(element => {
-  //   element.style.height = window.innerHeight - offsetHeight + 'px';
-  // });
 };
 window.onresize = changeHeight;
 window.addEventListener('load', changeHeight);

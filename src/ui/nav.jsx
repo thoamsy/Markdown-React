@@ -1,23 +1,29 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import fileIcon from '../icons/folder.svg';
-import addIcon from '../icons/add.svg';
 
 const Navbar = ({ title, createNewDocument, toggleSidebar }) => {
   return (
-    <nav className="navbar navbar-dark bg-dark fixed-top">
-      <ul className="navbar-nav mr-auto">
-        <li className="nav-item">
-          <a className="btn btn-dark text-light">
-            {title}
-          </a>
-        </li>
-      </ul>
+    <nav className="navbar is-light">
+      <div className="navbar-brand">
+        <a className="navbar-item title">
+          {title}
+        </a>
+      </div>
 
-      <div className="d-flex justify-content-between" style={{ width: 100 }}>
-        <img src={addIcon} alt="add file icon"
-          title="create new document" onClick={createNewDocument} />
-        <img src={fileIcon} alt="your history resource" onClick={toggleSidebar}/>
+      <div className="navbar-end" style={{ width: 100 }}>
+        <a href="#123" className="navbar-item"
+          onClick={createNewDocument}>
+          <span className="icon is-large">
+            <i className="fa fa-plus"></i>
+          </span>
+        </a>
+
+        <a href="#456" className="navbar-item"
+          onClick={toggleSidebar}
+        >
+          <span className="icon is-large">
+            <i className="fa fa-file-text"></i>
+          </span>
+        </a>
       </div>
     </nav>
   );

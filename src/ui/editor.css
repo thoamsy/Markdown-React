@@ -8,14 +8,12 @@ body {
 
 .my-gfm {
   margin-top: 70px;
-  display: flex;
   font-family: "Source Sans Pro", sans-serif;
   justify-content: space-between;
   max-width: 100%;
 }
 .CodeMirror {
   height: 100%;
-  flex: 0 50%;
   font-family: 'Fira Code', monospace;
   font-size: 20px;
   overflow: scroll;
@@ -28,14 +26,10 @@ body {
   padding: 10px 40px 0;
 }
 
-
-
 /* 渲染样式 */
-.preview {
+.content {
   min-height: 100%;
   max-height: 100%;
-  flex-basis: 50%;
-  /* transform: translateX(50%); */
   font-size: 20px;
   color: #3f3f3f;
   padding: 10px 40px;
@@ -44,61 +38,14 @@ body {
   overflow-wrap: break-word;
   overflow: scroll;
 }
-.preview a {
-    color: #4fa1bd;
-    text-decoration: none;
-    background: transparent;
-}
-
-.preview pre {
-  border: 1px solid #ccc;
-  padding: 10px;
-  maring: 0 0 1.1em;
-  border: 0;
-  border-radius: 5px;
-  display: block;
-  line-height: 1.45;
-  word-wrap: break-word;
-  color: #333;
-  background-color: rgba(128,128,128,.05);
-}
-
-.preview h1,
-.preview h2,
-.preview h3,
-.preview h4,
-.preview h5,
-.preview h6 {
-  font-weight: bold;
-  margin: 1em 0;
-  text-align: start;
-}
-
-.preview blockquote {
-  border-left: 10px solid rgba(128, 128, 128, .075);
-  background-color: rgba(128,128,128,.05);
-  border-radius: 0 5px 5px 0;
-  padding: 15px 20px 10px;
-}
-
-sup.footnote-ref {
-  position: relative;
-  top: -.5em;
-  font-size: .8em;
-}
 
 /* 导航栏 */
-.navbar li>a {
-  font-size: 30px;
-  font-weight: bold;
-  font-family: sans-serif;
-}
-.navbar .d-flex>img {
+.navbar .icon {
   transition: all .2s ease-out;
   position: relative;
   cursor: pointer;
 }
-.navbar .d-flex>img:hover {
+.navbar .icon {
   transform: scale(1.3);
 }
 
@@ -119,7 +66,7 @@ aside.toggled {
   transform: translateX(0);
 }
 
-.container-fluid>.backdrop {
+.container>.backdrop {
   max-width: 100%;
   position: fixed;
   top: 0;
@@ -129,19 +76,10 @@ aside.toggled {
   z-index: 1040;
   background-color: #606060;
 }
-.container-fluid>.backdrop.in {
+.container>.backdrop.in {
   opacity: .5;
 }
-.container-fluid>.backdrop.out {
+.container>.backdrop.out {
   opacity: 0;
   pointer-events: none;
-}
-
-@media screen and (max-width: 768px) {
-  .CodeMirror {
-    flex-basis: 0%;
-  }
-  .preview {
-    flex-basis: 100%;
-  }
 }

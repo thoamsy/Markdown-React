@@ -1,5 +1,5 @@
 # 简易 markdown 编辑器
-整个项目基于 [React](reactjs.org) 和 [Boostrap 4](http://getbootstrap.com/docs/4.0/getting-started/introduction/) Beta 2 创建。 
+整个项目基于 [React](reactjs.org) 和 [Bulma](https://bulma.io) 创建。 
 
 Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it)，一个非常卓绝的库。
 

@@ -9,23 +9,22 @@ const FileExplore = ({
   switchArticle,
   showSidebar
 }) => {
-  const handleClick = ({ currentTarget }) => {
-    const clickedId = currentTarget.getAttribute('data-id');
-    if (clickedId === theId) return;
+  const handleClick = ({ target }) => {
+    const clickedId = target.getAttribute('data-id');
+    if (!clickedId || clickedId === theId) return;
     switchArticle(clickedId);
   }; 
   return (
     <aside className={`menu ${showSidebar ? 'toggled' : 'hidden'}`}>
       <p className="menu-label">已保存</p>
-      <ul className="menu-list">
+      <ul className="menu-list" onClick={handleClick}>
         {
           articleInformations.length ? 
             articleInformations.map(
               ({ title, updatedDate, id }, i) => (
-                <li>
+                <li key={i} data-id={id}>
                   <a className={
-                    `${theId === id && 'is-active'} is-dark`} href="#" key={i} data-id={id}
-                  onClick={handleClick}
+                    `${theId === id && 'is-active'} is-dark`} href="#" data-id={id}
                   >
                     {title}
                     <div className="tags has-addons">

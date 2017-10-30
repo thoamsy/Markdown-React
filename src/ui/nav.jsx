@@ -9,7 +9,7 @@ const Navbar = ({ title, createNewDocument, toggleSidebar }) => {
         </a>
       </div>
 
-      <div className="navbar-end" style={{ width: 100 }}>
+      <div className="navbar-end">
         <a href="#123" className="navbar-item"
           onClick={createNewDocument}>
           <span className="icon is-large">

@@ -6,13 +6,13 @@ body {
   overflow-x: hidden;
 }
 
-.my-gfm {
-  margin-top: 70px;
+.article.columns {
+  margin-top: 0;
   font-family: "Source Sans Pro", sans-serif;
   justify-content: space-between;
-  max-width: 100%;
 }
-.CodeMirror {
+
+.column.CodeMirror {
   height: 100%;
   font-family: 'Fira Code', monospace;
   font-size: 20px;
@@ -32,7 +32,6 @@ body {
   max-height: 100%;
   font-size: 20px;
   color: #3f3f3f;
-  padding: 10px 40px;
   line-height: 1.45;
   background: #f6f6f6;
   overflow-wrap: break-word;
@@ -66,7 +65,7 @@ aside.toggled {
   transform: translateX(0);
 }
 
-.container>.backdrop {
+.backdrop {
   max-width: 100%;
   position: fixed;
   top: 0;
@@ -76,10 +75,10 @@ aside.toggled {
   z-index: 1040;
   background-color: #606060;
 }
-.container>.backdrop.in {
-  opacity: .5;
+.backdrop.in {
+  opacity: .3;
 }
-.container>.backdrop.out {
+.backdrop.out {
   opacity: 0;
   pointer-events: none;
 }

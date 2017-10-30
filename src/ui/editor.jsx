@@ -70,7 +70,7 @@ class MarkdownEditor extends PureComponent {
   };
 
   render() {
-    return <textarea placeholder="write your mind." />;
+    return <textarea placeholder="write your mind."/>;
   }
 }
 export default MarkdownEditor;

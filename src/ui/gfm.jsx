@@ -92,7 +92,6 @@ class GFM extends PureComponent {
 
   switchArticle = (articleId) => {
     this.toggleSidebar();
-    console.log(articleId);
     this.worker.postMessage({ id: articleId, useFor: 'get' });
   }
 
@@ -111,7 +110,6 @@ class GFM extends PureComponent {
     // 存进 indexedDB
     this.worker.postMessage({ article: data, useFor: 'update' });
 
-    console.log(this.state);
     const { articleInformations } = this.state;
     const getMeta = pick(['title', 'updatedDate', 'id'], data);
     const updateArticleMetas = pipe(
@@ -167,7 +165,7 @@ class GFM extends PureComponent {
       showSidebar
     } = this.state;
     return (
-      <div className="container is-fluid">
+      <div className="">
         <Nav title={title}
           createNewDocument={this.createNewDocument}
           toggleSidebar={this.toggleSidebar} />
@@ -177,7 +175,7 @@ class GFM extends PureComponent {
           {...{ theId: id, theTitle: title, articleInformations, showSidebar }}
           switchArticle={this.switchArticle}
         />
-        <article className="my-gfm columns">
+        <article className="columns">
           <Editor
             sendToWorker={this.sendToWorker}
             getInstance={this.getInstance}

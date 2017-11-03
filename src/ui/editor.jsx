@@ -1,15 +1,18 @@
 import React, { PureComponent } from 'react';
+import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/gfm/gfm';
-import CodeMirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/continuelist';
+import 'codemirror/addon/dialog/dialog'
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/selection/active-line';
 import 'codemirror/theme/twilight.css';
 import 'codemirror/mode/javascript/javascript';
-import 'codemirror/keymap/vim';
+import 'codemirror/keymap/sublime';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/search/search'
 import 'bulma/css/bulma.css';
 
 class MarkdownEditor extends PureComponent {
@@ -20,7 +23,7 @@ class MarkdownEditor extends PureComponent {
         highlightFormatting: true
       },
       showCursorWhenSelecting: true,
-      keyMap: navigator.userAgent.includes('Chrome') ? 'vim' : 'default',
+      keyMap: navigator.userAgent.includes('Chrome') ? 'sublime' : 'default',
       autofocus: true,
       lineWrapping: true,
       autoCloseBrackets: true,

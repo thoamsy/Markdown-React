@@ -16,10 +16,11 @@ Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it
 1. 实时渲染. 通过 `web worker` 来生成 markdown 渲染后的 HTML 代码，稍微提供性能。不过渲染 HTML 成 DOM 仅仅用的是 `innerHTML`，感觉效率还是偏低，但是不知道如果提高
 2. 编辑器部分
     1. 高亮当前行
-    2. VIM 模式 (Safari 不支持)
+    2. Sublime 快捷键
     3. 自动生成括号
     4. 高亮代码块部分的内容
     5. 支持 Drop-Drag(只支持 md 文件)
+    6. 支持搜索和替换
 3. Markdown 部分
     1. 支持表格
     2. 支持 checkbox
@@ -31,7 +32,7 @@ Markdown 的渲染使用 [markdownit](https://github.com/markdown-it/markdown-it
 
 ## 使用方式
 安装 `yarn`，使用 `yarn install && yarn start` 来开启调试。(确实我不确定能不能成功，安装了 eslint 的配置文件后，多了一个 `package.lock.json`，不知道有没有影响。)
- 当然，可以看在线 [Demote](https://queenyoung.github.io/Markdown-React/)
+ 当然，可以看在线 [Demo](https://queenyoung.github.io/Markdown-React/)
 
  项目有两个按钮，左边的用来生成新的 markdown 文件，右边的就是浏览当前的文件(但是如果没有保存任何文件的话，会很尴尬). **通过将 markdown 的第一行设置为 `# ` 格式来获得文章标题**，有点类似于 Bear, 默认情况下是 *untilted*.
 
